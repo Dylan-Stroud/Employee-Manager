@@ -41,6 +41,19 @@ function GetDepartmentNames(){
   return db.promise().query(sql)
   
 }
+function viewAllDepartments(){
+  db.getAllDepartments()
+        .then(([rows]) => {
+            let departments = rows;
+            console.log("\n");
+            console.table(departments);
+        })
+        .then(() => promptUser());
+}
+function viewAllRoles(){
+
+}
+
 function getRoles(){
   const sql = `
   SELECT roles.name
@@ -106,7 +119,7 @@ function addRole(role){
   const sql = `
   INSERT INTO role SET ?
   `;
-  return db.promis().query(sql, role)
+  return db.promise().query(sql, role)
 }
 function addEmployee(employee){
   promptUser([
@@ -120,37 +133,6 @@ function updateEmployeeRole(){
   ])
   
 }
-function updateEmployeeManager(){
-  
-}
-function viewEmployeesByDepartment(){
-  
-}
-function viewEmployeesByManager(){
-  
-}
-function removeEmployee(){
-  
-}
-function removeDepartment(){
-  
-}
-function removeRole(){
-  
-}
-function viewTotalUtilizedDeptBudget(){
-  
-}
-
-
-// Default response for any other request (Not Found)
-app.use((req, res) => {
-  res.status(404).end();
-});
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
 
 function promptUser
 (){
@@ -182,6 +164,7 @@ function promptUser
     let answer = userChoice.pickOption;
     if (answer === "View All Departments") {
       viewAllDepartments();
+      
     }
     
     if (answer === "View All Roles") {
@@ -241,3 +224,16 @@ function promptUser
     }
   })
 }
+
+
+/*
+
+// Default response for any other request (Not Found)
+app.use((req, res) => {
+  res.status(404).end();
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+*/
