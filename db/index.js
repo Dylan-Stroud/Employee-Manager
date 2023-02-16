@@ -63,7 +63,7 @@ class db{
     }
     updateEmployeeManager(employeeId, managerId){
         const sql = `
-            UPDATE emplee SET managerid = ? WHERE id = ?
+            UPDATE employee SET managerid = ? WHERE id = ?
         `;
         return this.connection.promise().query(sql, [managerId, employeeId]);
     }

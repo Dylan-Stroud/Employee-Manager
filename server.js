@@ -187,16 +187,17 @@ function updateEmployeeRole(){
                 value: id
               }));
 
-              prompt({
+              inquirer.prompt({
                 type: "list",
                 name: "roleid",
                 message: "Which role would you like to give the emloyee?",
                 choices: roleChoices
               })
-            })
               .then(res => db.updateEmployeeRole(employeeId, res.roleId))
               .then(() => console.log("Updated employee's role"))
               .then(() => promptUser())
+            })
+              
         })
 
     })
@@ -229,16 +230,17 @@ function updateEmployeeManager(){
                 value: id
               }));
 
-              prompt({
+              inquirer.prompt({
                 type: "list",
                 name: "mangerid",
                 message: "Which manager would you like to give the emloyee?",
                 choices: managerChoices
               })
-            })
               .then(res => db.updateEmployeeManager(employeeId, res.managerid))
               .then(() => console.log("Updated employee's manager"))
               .then(() => promptUser())
+            })
+              
         })
 
     })
