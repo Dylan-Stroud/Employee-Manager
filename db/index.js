@@ -3,7 +3,7 @@ class db{
     constructor(connection){
         this.connection = connection;
     }
-    getAllEmployess(){
+    getAllEmployees(){
         const sql = `
             SELECT employee.id, 
                 employee.firstname, 
@@ -11,10 +11,21 @@ class db{
                 role.title, 
                 department.name AS department, 
                 role.salary, 
-                CONCAT(manager.firstname, " ", manager.lastname) AS manager
-                FROM employee
-                LEFT JOIN department ON role.departmentid = department.id
-                LEFT JOIN manager on manager.id = employee.managerid;
+                CONCAT(manager.firstname, ' ', manager.lastname) AS manager FROM employee 
+                LEFT JOIN role ON employee.roleid = role.id 
+                LEFT JOIN department ON role.departmentid = department.id 
+                LEFT JOIN employee manager ON manager.id = employee.managerid
+            `;
+            return this.connection.promise().query(sql)
+    }
+    getAllManagers(){
+        const sql = `
+            SELECT employee.id, 
+                employee.firstname, 
+                employee.lastname, 
+                employee.managerid
+            FROM employee
+            WHERE employee.managerid IS NULL
             `;
             return this.connection.promise().query(sql)
     }
@@ -24,7 +35,7 @@ class db{
             role.title, 
             department.name AS department, 
             role.salary FROM role 
-            LEFT JOIN department on role.departmentid = department.id;
+            LEFT JOIN department on role.departmentid = department.id
             `;
         return this.connection.promise().query(sql);
       
@@ -33,7 +44,6 @@ class db{
         const sql = `
           SELECT department.id, department.name
           FROM department
-        
         `;
         return this.connection.promise().query(sql);
       
@@ -50,6 +60,45 @@ class db{
             UPDATE employee SET roleid = ? WHERE id = ?
         `;
         return this.connection.promise().query(sql, [roleId, employeeId]);
+    }
+    updateEmployeeManager(employeeId, managerId){
+        const sql = `
+            UPDATE emplee SET managerid = ? WHERE id = ?
+        `;
+        return this.connection.promise().query(sql, [managerId, employeeId]);
+    }
+
+    getEmployeesByMang(managerid){
+        const sql = `
+            SELECT employee.id, employee.firstname, employee.lastname, employee.managerid
+            FROM 
+                employee
+            WHERE employee.managerid = ? 
+        `;
+        return this.connection.promise().query(sql, managerid )
+
+    }
+    getEmployeesByDept(departmentid){
+        const sql = `
+            SELECT department.id, department.name, role.id AS roleid, role.departmentid AS roledep, employee.roleid AS emprol, employee.firstname, employee.lastname
+            FROM department,
+                role,
+                employee
+            WHERE department.id = role.departmentid AND role.id = employee.roleid AND department.id = ?
+        `;
+        return this.connection.promise().query(sql, departmentid )
+
+    }
+    getSalariesInDept(departmentid){
+        const sql = `
+            SELECT department.name AS dep_name , SUM(role.salary) AS Total
+            FROM department,
+                role,
+                employee
+            WHERE department.id = role.departmentid AND role.id = employee.roleid AND department.id = ?
+        `;
+        return this.connection.promise().query(sql, departmentid )
+
     }
     createEmployee(employee){
         const sql = `
