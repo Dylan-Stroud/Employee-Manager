@@ -21,10 +21,10 @@ CREATE TABLE employee (
     id INT AUTO_INCREMENT PRIMARY KEY,
     firstname VARCHAR(30) NOT NULL,
     lastname VARCHAR(30) NOT NULL,
-    roleId INT,
-    INDEX role_ind(roleId),
-    CONSTRAINT fk_role FOREIGN KEY (roleId) REFERENCES role(Id) ON DELETE CASCADE,
-    managerId INT,
-    INDEX manager_ind(managerId),
-    CONSTRAINT fk_manager FOREIGN KEY (managerId) REFERENCES employee(id) ON DELETE SET NULL
+    roleid INT,
+    INDEX role_ind(roleid),
+    CONSTRAINT fk_role FOREIGN KEY (roleid) REFERENCES role(Id) ON DELETE CASCADE,
+    managerid INT,
+    INDEX manager_ind(managerid),
+    CONSTRAINT fk_manager FOREIGN KEY (managerid) REFERENCES employee(id) ON DELETE SET NULL
 );
